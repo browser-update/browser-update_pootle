@@ -226,9 +226,6 @@ def deploy(*args):
     # The 'git status' is done so the virtualenv.create_commit later will not need to
     # scan all files first. Scanning files may be bad for performance and we want to
     # keep the downtime to a minimum.
-    if 'virtualenv' in fab.env and fab.env.virtualenv.virtualenv_path:
-        with fab.cd(fab.env.virtualenv.virtualenv_path):
-            fab.run('git status')
     with fab.cd(fab.env.git.remote_repository_path):
         fab.run('git status')
     fab.execute(deploy_stop)
