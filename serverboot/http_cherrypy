@@ -15,7 +15,7 @@ start() {
 }
 
 stop() {
-        ebegin "Stopping WMP Xapian Server"
+        ebegin "Stopping Pootle HTTP Server"
         start-stop-daemon --stop --quiet --pidfile /var/www/localhost/users/wmp/bu_pootle/web/http_cherrypy.pid
         eend $?
 }

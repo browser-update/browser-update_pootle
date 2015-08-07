@@ -5,7 +5,7 @@ depend() {
 }
 
 start() {
-        ebegin "Starting Pootle HTTP Server"
+        ebegin "Starting Pootle RQ Worker Server"
         sudo start-stop-daemon --start --pidfile /var/www/localhost/users/wmp/bu_pootle/web/rqworker.pid \
                 --chuid wmp:wmp --background --make-pidfile --verbose \
                 --exec /var/www/localhost/users/wmp/bu_pootle/env/bin/pootle \
@@ -15,7 +15,7 @@ start() {
 }
 
 stop() {
-        ebegin "Stopping WMP Xapian Server"
+        ebegin "Stopping Pootle RQ Worker Server"
         start-stop-daemon --stop --quiet --pidfile /var/www/localhost/users/wmp/bu_pootle/web/rqworker.pid
         eend $?
 }
