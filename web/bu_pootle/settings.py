@@ -40,11 +40,11 @@ SECRET_KEY = 'PzZy2k4lBZAFsWF1J2QpyRTvqrzJuj0/96EaW8SO4DNANfZ4hOOH6Vrj8xbs0v0Ygf
 # A list of strings representing the host/domain names that this Pootle server
 # can serve. This is a Django's security measure. More details at
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    #'${your_server}',
-]
+# ALLOWED_HOSTS = [
+#     '127.0.0.1',
+#     'localhost',
+#     #'${your_server}',
+# ]
 
 
 #
@@ -197,6 +197,10 @@ POOTLE_MT_BACKENDS = [
 #        ('YANDEX_TRANSLATE', ''),
 ]
 
+# Behind proxy / deployment
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_HTTPS', 'on')
+ALLOWED_HOSTS = ('*',)  # Apache will take care of validation
 
 _local_settings_path = os.path.join(MODULE_ROOT, 'local_settings.py')
 if os.path.exists(_local_settings_path):

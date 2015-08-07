@@ -1,0 +1,31 @@
+RewriteEngine On
+
+# Umleitung auf eine eindeutige Domain
+#RewriteCond %{HTTP_HOST} !^i18n\.browser-update\.org [NC]
+#RewriteRule ^(.*)$ http://i18n.browser-update.org/$1 [L,R=301]
+
+RequestHeader add "X-Forwarded-HTTPS" "%{HTTPS}e"
+RequestHeader add "X-Forwarded-Protocol" "%{SERVER_PROTOCOL}e"
+
+# Anfrage an Django weitergeben, wenn Datei nicht gefunden
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^/?(.*)$ http://localhost:9010/$1 [QSA,L,P]
+RewriteRule ^/?$ http://localhost:9010/ [QSA,L,P]
+
+#ErrorDocument 503 /maintainance.html
+#
+#<IfModule mod_expires.c>
+#  <FilesMatch \.(css|js|png|jpe?g|gif)(\.gz)?$>
+#    ExpiresActive On
+#    ExpiresDefault A1209600
+#  </FilesMatch>
+#</IfModule>
+#
+#<IfModule mod_deflate.c>
+#    AddOutputFilterByType DEFLATE text/html
+#    AddOutputFilterByType DEFLATE text/css
+#    AddOutputFilterByType DEFLATE text/javascript
+#    AddOutputFilterByType DEFLATE application/x-javascript
+#</IfModule>
+
