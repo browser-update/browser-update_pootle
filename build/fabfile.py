@@ -101,7 +101,7 @@ def _deploy_pootle_factory(_git):
     from fabdeploit.base import BaseCommandUtil
 
     class Pootle(BaseCommandUtil):
-        settings_path = '%s/web/settings.py' % _git.remote_repository_path
+        settings_path = '%s/web/bu_pootle/settings.py' % _git.remote_repository_path
 
         def __init__(self, virtualenv, **kwargs):
             self.virtualenv = virtualenv
@@ -145,7 +145,7 @@ def _deploy_base_env():
     fab.require('git')
 
     fab.env.use_ssh_config = True
-    fab.env.hosts = ['barbel']
+    fab.env.hosts = ['wmp.barbel']
 
     fab.env.virtualenv = _deploy_virtualenv_factory(fab.env.git)()
     fab.env.pootle = _deploy_pootle_factory(fab.env.git)(fab.env.virtualenv)
@@ -154,7 +154,7 @@ def _deploy_base_env():
 @fab.task
 def barbel():
     fab.env.git = _deploy_git_factory()(
-        remote_repository_path='/var/www/localhost/users/wmp/bu',
+        remote_repository_path='/var/www/localhost/users/wmp/bu_pootle',
         release_branch='master',
     )
 
@@ -183,8 +183,6 @@ def deploy_virtualenv_files(force=False):
 
     fab.env.virtualenv.init(force=force)
     fab.env.virtualenv.update()
-    if fab.env.git.release_commit:
-        fab.env.virtualenv.git.commit(tag='release/%s' % fab.env.git.release_commit.hexsha)
 
 
 @fab.task
@@ -239,8 +237,6 @@ def deploy(*args):
     fab.execute(deploy_apply_files)
     if not 'novirtualenv' in args:
         fab.execute(deploy_virtualenv_files)
-    elif 'virtualenv' in fab.env:
-        fab.env.virtualenv.git.commit(tag='release/%s' % fab.env.git.release_commit.hexsha)
     if not 'nomigrate' in args:
         fab.execute(deploy_migrate)
 
@@ -257,7 +253,10 @@ def deploy_setup(*args):
     fab.execute(deploy_virtualenv_files)
     with fab.cd(posixpath.join(fab.env.git.remote_repository_path, 'web', 'bu_pootle')):
         fab.run('cp local_settings.example.py local_settings.py')
-        fab.run('vi local_settings.py')
+        print '*' * 79
+        print 'Now edit local_settings.py to fit your needs, press enter when ready!'
+        print '*' * 79
+        fab.run('read')
     fab.env.pootle.migrate()
     fab.env.pootle.initdb()
     fab.env.pootle.createsuperuser()
