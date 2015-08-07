@@ -9,7 +9,7 @@ start() {
         sudo start-stop-daemon --start --pidfile /var/www/localhost/users/wmp/bu_pootle/web/http_cherrypy.pid \
                 --chuid wmp:wmp --background --make-pidfile --verbose \
                 --exec /var/www/localhost/users/wmp/bu_pootle/env/bin/pootle \
-                --config=/var/www/localhost/users/wmp/bu_pootle/web/bu_pootle/settings.py \
+                -- --config=/var/www/localhost/users/wmp/bu_pootle/web/bu_pootle/settings.py \
                 run_cherrypy --port=9010
         eend $?
 }
