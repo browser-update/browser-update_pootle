@@ -1,0 +1,21 @@
+#!/sbin/runscript
+
+depend() {
+        need net
+}
+
+start() {
+        ebegin "Starting Pootle HTTP Server"
+        sudo start-stop-daemon --start --pidfile /var/www/localhost/users/wmp/bu_pootle/web/http_cherrypy.pid \
+                --chuid wmp:wmp --background --make-pidfile --verbose \
+                --exec /var/www/localhost/users/wmp/bu_pootle/env/bin/pootle \
+                --config=/var/www/localhost/users/wmp/bu_pootle/web/bu_pootle/settings.py \
+                run_cherrypy --port=9010
+        eend $?
+}
+
+stop() {
+        ebegin "Stopping WMP Xapian Server"
+        start-stop-daemon --stop --quiet --pidfile /var/www/localhost/users/wmp/bu_pootle/web/http_cherrypy.pid
+        eend $?
+}
